@@ -1,0 +1,123 @@
+trigger:
+- '*'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+# Define Variables for Environments
+variables:
+  buildConfiguration: 'Release'
+  releaseBranchName: 'master'
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: 'aks-acr-con'
+  imageRepository: 'app1/app1nginx'
+  containerRegistry: 'kkdcd7acrdev.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: 'Build'
+  displayName: 'Build AKS app deploy'
+  jobs: 
+  - job: 'Build'
+    displayName: 'Build AKS app deploy'
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+    - task: CopyFiles@2
+      displayName: 'Copy Terraform files to artifacts'
+      inputs:
+        SourceFolder: './'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/$(buildConfiguration)/aks-manifests-out'
+        
+    - publish: '$(Build.ArtifactStagingDirectory)'
+      artifact: drop      
+- stage: DeployAKSClusters
+  dependsOn: Build
+  condition: |
+    and
+    (
+      succeeded(),
+      eq(variables['Build.SourceBranchName'], variables['releaseBranchName'])
+    )
+  jobs:
+    - deployment: DeployAKSClusterInfra
+      displayName: DeployAKSClusterInfra
+      pool:
+        vmImage: $(vmImageName)
+      environment: $(environment)
+      variables:
+      - group: Release    
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - download: current
+              artifact: drop
+
+            - task: AzureCLI@1
+              displayName: 'Azure CLI to deploy required Azure resources'
+              inputs:
+                azureSubscription: 'aks-svc-con'
+                scriptType: ps
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az group create --location $(location) --name $(backendAzureRmResourceGroupName)
+                  az storage account create --name $(backendAzureRmStorageAccountName) --resource-group $(backendAzureRmResourceGroupName) --location $(location) --sku Standard_LRS
+                  az storage container create --name $(backendAzureRmContainerName) --account-name $(backendAzureRmStorageAccountName)
+            - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+              displayName: Install Terraform
+              inputs:
+                terraformVersion: $(terraformVersion)            
+            - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+              displayName: Terraform Init
+              inputs:
+                workingDirectory: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/aks-manifests-out/infrastructure-manifests/'
+                backendType: 'azurerm'
+                backendServiceArm: 'aks-svc-con'
+                backendAzureRmResourceGroupName: '$(backendAzureRmResourceGroupName)'
+                backendAzureRmStorageAccountName: '$(backendAzureRmStorageAccountName)'
+                backendAzureRmContainerName: '$(backendAzureRmContainerName)'
+                backendAzureRmKey: 'aks-$(environment).tfstate'
+                allowTelemetryCollection: false            
+            - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+              displayName: Terraform Plan
+              inputs:
+                command: plan
+                workingDirectory: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/aks-manifests-out/infrastructure-manifests/'
+                environmentServiceNameAzureRM: 'aks-svc-con'
+                allowTelemetryCollection: false
+            
+            - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+              displayName: Terraform Apply
+              inputs:
+                command: 'apply'
+                workingDirectory: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/aks-manifests-out/infrastructure-manifests/'
+                environmentServiceNameAzureRM: 'aks-svc-con'
+                allowTelemetryCollection: false
+- stage: ACRBuild
+  dependsOn: DeployAKSClusters
+  condition: |
+    and
+    (
+      succeeded(),
+      eq(variables['Build.SourceBranchName'], variables['releaseBranchName'])
+    )
+  displayName: Build and push stage
+  jobs:  
+  - job: ACRBuild
+    displayName: ACRBuild job
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(Pipeline.Workspace)/drop/$(buildConfiguration)/aks-manifests-out/dockerfiles/Dockerfile
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)

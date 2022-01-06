@@ -1,0 +1,15 @@
+
+  jobs:
+    - job: azcli_tfremotestate_create
+      steps:
+            - task: AzureCLI@2
+              displayName: 'BootTF Remote State for AKS Cluster'
+              inputs:
+                azureSubscription: '${{ parameters.backendServiceArm }}'
+                scriptType: ps
+                scriptLocation: inlineScript
+                addSpnToEnvironment: true
+                inlineScript: |
+                  az group create --location '${{ parameters.location }}' --name '${{ parameters.backendAzureRmResourceGroupName }}'
+                  az storage account create --name '${{ parameters.backendAzureRmStorageAccountName }}' --resource-group '${{ parameters.backendAzureRmResourceGroupName }}' --location '${{ parameters.location }}' --sku Standard_LRS
+                  az storage container create --name '${{ parameters.backendAzureRmContainerName }}' --account-name '${{ parameters.backendAzureRmStorageAccountName }}'

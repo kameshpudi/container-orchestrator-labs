@@ -74,7 +74,7 @@ stages:
             - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
               displayName: Terraform Init
               inputs:
-                workingDirectory: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/aks-manifests-out/infrastructure-manifests/'
+                workingDirectory: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/aks-manifests-out/az-aks/infrastructure-manifests/'
                 backendType: 'azurerm'
                 backendServiceArm: 'aks-svc-con'
                 backendAzureRmResourceGroupName: '$(backendAzureRmResourceGroupName)'
@@ -86,7 +86,7 @@ stages:
               displayName: Terraform Plan
               inputs:
                 command: plan
-                workingDirectory: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/aks-manifests-out/infrastructure-manifests/'
+                workingDirectory: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/aks-manifests-out/az-aks/infrastructure-manifests/'
                 environmentServiceNameAzureRM: 'aks-svc-con'
                 allowTelemetryCollection: false
             
@@ -94,7 +94,7 @@ stages:
               displayName: Terraform Apply
               inputs:
                 command: 'apply'
-                workingDirectory: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/aks-manifests-out/infrastructure-manifests/'
+                workingDirectory: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/aks-manifests-out/az-aks/infrastructure-manifests/'
                 environmentServiceNameAzureRM: 'aks-svc-con'
                 allowTelemetryCollection: false
 - stage: ACRBuild

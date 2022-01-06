@@ -6,18 +6,18 @@
         displayName: 'install'
         inputs:
           terraformVersion: '${{ parameters.terraform_version }}'
-      - task: TerraformTaskV1@0
+      - task: TerraformTaskV2@2
         displayName: 'init'
         inputs:
           provider: 'azurerm'
-          command: 'init'
+        #   command: 'init'
           backendServiceArm: '${{ parameters.backendServiceArm }}'
           backendAzureRmResourceGroupName: '${{ parameters.backendAzureRmResourceGroupName }}'
           backendAzureRmStorageAccountName: '${{ parameters.backendAzureRmStorageAccountName }}'
           backendAzureRmContainerName: '${{ parameters.backendAzureRmContainerName }}'
           backendAzureRmKey: '${{ parameters.backendAzureRmKey }}' 
           workingDirectory: '$(System.DefaultWorkingDirectory)/az-aks/infrastructure-manifests/'
-      - task: TerraformTaskV1@0
+      - task: TerraformTaskV2@2
         displayName: 'validate'
         inputs:
           provider: 'azurerm'

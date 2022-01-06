@@ -1,0 +1,38 @@
+trigger:
+- '*'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+name: $(BuildDefinitionName)_$(date:yyyyMMdd)$(rev:.r)
+
+pr: none
+
+parameters:
+
+  - name: Action
+    displayName: Action
+    type: string
+    default: 'Build'
+    values:
+    - Plan
+    - Apply
+    - Destroy
+
+variables:
+  - name: azureContainerRegistry
+    value: 'aks-acr-con'
+  - name: backendServiceArm
+    value: 'aks-svc-con'
+  - name: environment
+    value: 'dev'
+
+stages :   
+  - stage: terraform_remotestate
+    condition: ne('${{ parameters.Action }}', 'Build')
+    jobs:
+      - template: templates/acr-docker-compose.yaml
+        parameters:
+          azureSubscriptionEndpoint: ${{ variables.backendServiceArm }}
+          dockerComposeFile: 'docker-compose.yaml'
+          azureContainerRegistry: ${{ variables.azureContainerRegistry }}

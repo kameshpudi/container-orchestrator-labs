@@ -1,0 +1,14 @@
+  jobs:
+    - job: ACR_DockerCompose
+      continueOnError: false
+      steps:
+      - task: DockerCompose@2
+        displayName: 'DockerCompose and push images to container registry'
+        inputs:
+          action: Push services
+          azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+          azureContainerRegistry: ${{ parameters.containerRegistry }}
+          dockerComposeFile: ${{ parameters.dockeComposeFfile }}
+          projectName: $(Build.Repository.Name)
+          qualifyImageNames: true
+          additionalImageTags: ${{ parameters.BuildId }}

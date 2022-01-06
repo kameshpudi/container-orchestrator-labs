@@ -2,8 +2,8 @@
   jobs:
     - job: azcli_tfremotestate_create
       steps:
-            - task: AzureCLI@2
-              displayName: 'BootTF Remote State for AKS Cluster'
+            - task: AzureCLI@1
+              displayName: 'TF Remote State for AKS Cluster'
               inputs:
                 azureSubscription: '${{ parameters.backendServiceArm }}'
                 scriptType: ps

@@ -34,5 +34,5 @@ stages :
       - template: templates/acr-docker-compose.yaml
         parameters:
           azureSubscriptionEndpoint: ${{ variables.backendServiceArm }}
-          dockerComposeFile: 'docker-compose.yaml'
+          dockerComposeFile: '$(System.DefaultWorkingDirectory)/az-aks/pipelines/docker-compose.yaml'
           azureContainerRegistry: ${{ variables.azureContainerRegistry }}

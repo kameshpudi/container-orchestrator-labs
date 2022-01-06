@@ -16,7 +16,7 @@
             backendAzureRmStorageAccountName: '${{ parameters.backendAzureRmStorageAccountName }}'
             backendAzureRmContainerName: '${{ parameters.backendAzureRmContainerName }}'
             backendAzureRmKey: '${{ parameters.backendAzureRmKey }}' 
-            workingDirectory: '$(System.DefaultWorkingDirectory)/infrastructure-manifests/'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/az-aks/infrastructure-manifests/'
         - task: TerraformTaskV1@0
           displayName: 'plan'
           condition: and(succeeded(), eq(variables['Action'], 'Plan'))
@@ -25,4 +25,4 @@
             command: 'plan'
             commandOptions: '-input=false -var-file="../${{ parameters.environment }}/${{ parameters.environment }}.tfvars"'
             environmentServiceNameAzureRM: '${{ parameters.backendServiceArm }}'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/infrastructure-manifests/'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/az-aks/infrastructure-manifests/'

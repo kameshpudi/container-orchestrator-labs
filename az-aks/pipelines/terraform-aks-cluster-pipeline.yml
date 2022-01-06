@@ -93,7 +93,7 @@ stages:
             - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
               displayName: Terraform Apply
               inputs:
-                command: 'apply'
+                command: 'destroy'
                 workingDirectory: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/aks-manifests-out/az-aks/infrastructure-manifests/'
                 environmentServiceNameAzureRM: 'aks-svc-con'
                 allowTelemetryCollection: false

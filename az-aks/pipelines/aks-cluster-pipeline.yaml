@@ -1,6 +1,7 @@
 name: $(BuildDefinitionName)_$(date:yyyyMMdd)$(rev:.r)
 
-trigger: '*'
+trigger:
+- '*'
 
 pr: none
 

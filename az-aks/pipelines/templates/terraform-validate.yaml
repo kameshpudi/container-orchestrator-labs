@@ -10,7 +10,6 @@
         displayName: 'init'
         inputs:
           provider: 'azurerm'
-        #   command: 'init'
           backendServiceArm: '${{ parameters.backendServiceArm }}'
           backendAzureRmResourceGroupName: '${{ parameters.backendAzureRmResourceGroupName }}'
           backendAzureRmStorageAccountName: '${{ parameters.backendAzureRmStorageAccountName }}'

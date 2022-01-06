@@ -1,7 +1,10 @@
-name: $(BuildDefinitionName)_$(date:yyyyMMdd)$(rev:.r)
-
 trigger:
 - '*'
+
+pool:
+  vmImage: 'ubuntu-latest'
+  
+name: $(BuildDefinitionName)_$(date:yyyyMMdd)$(rev:.r)
 
 pr: none
 

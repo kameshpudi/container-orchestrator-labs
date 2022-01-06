@@ -7,7 +7,7 @@ pool:
 # Define Variables for Environments
 variables:
   buildConfiguration: 'Release'
-  releaseBranchName: 'master'
+  releaseBranchName: 'main'
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'aks-acr-con'
   imageRepository: 'app1/app1nginx'

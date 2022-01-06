@@ -22,7 +22,7 @@ resource "azurerm_application_insights" "appinsights" {
 }
 
 resource "azurerm_key_vault" "keyvault" {
-  name                        = "${var.prefix}kv${var.env}"
+  name                        = "${var.prefix}kv1${var.env}"
   location                    = var.location
   resource_group_name         = var.resource_group_name
   enabled_for_disk_encryption = true

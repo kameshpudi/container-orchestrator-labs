@@ -27,32 +27,22 @@ variables:
   - name: backendAzureRmStorageAccountName
     value: 'kktfstatedevstg'
   - name: backendAzureRmContainerName
-    value: 'akstfstatefiles'
+    value: '$(Build.BuildId)'
   - name: backendAzureRmKey
     value: 'terraform.tfstate'
   - name: environment
     value: 'dev'
-  - name: terraform_version
-    value: '1.1.2'
-  - name: location
-    value: 'westeurope'
-  - name: aksAzureRmResourceGroupName
-    value: 'kkdcd7-aks-rg'
-  - name: aksName
-    value: 'kkdcd7aksdev'
-  - name: action
-    value: ${{ parameters.Action }}
 
 stages :   
   - stage: terraform_remotestate
     condition: ne('${{ parameters.Action }}', 'Destroy')
     jobs:
-      - template: templates/remote-storage-az-cli.yaml
+      - template: templates/acr-image-build.yaml
         parameters:
-          backendServiceArm: ${{ variables.backendServiceArm }}
-          backendAzureRmResourceGroupName: ${{ variables.backendAzureRmResourceGroupName }}
-          backendAzureRmStorageAccountName: ${{ variables.backendAzureRmStorageAccountName }}
-          backendAzureRmContainerName: ${{ variables.backendAzureRmContainerName }}
+          repository: ${{ variables.repository }}
+          dockerfile: ${{ variables.dockerfile }}
+          containerRegistry: ${{ variables.containerRegistry }}
+          tags: ${{ variables.tags }}
           backendAzureRmKey: ${{ variables.backendAzureRmKey }}
           location: ${{ variables.location }}
 
@@ -99,7 +89,7 @@ stages :
 
   - stage: bootstrap
     dependsOn: [terraform_apply]
-    condition: and(succeeded(), ne('${{ parameters.Action }}', 'Destroy'))
+    condition: ne('${{ parameters.Action }}', 'Destroy')
     jobs:
       - template: templates/aks-az-cli.yaml
         parameters:

@@ -6,7 +6,7 @@
         displayName: 'DockerCompose and push images to container registry'
         inputs:
           action: Push services
-          azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+          azureSubscriptionEndpoint:  ${{ parameters.azureSubscriptionEndpoint }}
           azureContainerRegistry: ${{ parameters.containerRegistry }}
           dockerComposeFile: ${{ parameters.dockeComposeFfile }}
           projectName: $(Build.Repository.Name)

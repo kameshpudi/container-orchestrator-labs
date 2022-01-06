@@ -2,7 +2,7 @@
     - job: ACR_DockerCompose
       continueOnError: false
       steps:
-      - task: DockerCompose@2
+      - task: DockerCompose@0
         displayName: 'DockerCompose and push images to container registry'
         inputs:
           action: Push services

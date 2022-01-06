@@ -1,5 +1,5 @@
   jobs:
-    - job: azcli_resourcegroup_create
+    - job: azcli_aksbootstrap
       steps:
             - task: AzureCLI@1
               displayName: 'BootStrap AKS Cluster'

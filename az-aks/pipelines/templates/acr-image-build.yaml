@@ -1,0 +1,12 @@
+  jobs:
+    - job: ACR_ImageBuild
+      continueOnError: false
+      steps:
+      - task: Docker@2
+        displayName: 'Build and push an image to container registry'
+        inputs:
+          command: buildAndPush
+          repository: ${{ parameters.repository }}
+          dockerfile: ${{ parameters.dockerfile }}
+          containerRegistry: ${{ parameters.containerRegistry }}
+          tags: ${{ parameters.BuildId }}

@@ -117,7 +117,7 @@ stages:
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
-        dockerfile: $(Pipeline.Workspace)/drop/$(buildConfiguration)/aks-manifests-out/dockerfiles/Dockerfile
+        dockerfile: $(Pipeline.Workspace)/drop/$(buildConfiguration)/aks-manifests-out/az-aks/dockerfiles/Dockerfile_3
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)

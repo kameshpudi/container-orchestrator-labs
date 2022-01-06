@@ -3,7 +3,7 @@ trigger:
 
 pool:
   vmImage: 'ubuntu-latest'
-  
+
 name: $(BuildDefinitionName)_$(date:yyyyMMdd)$(rev:.r)
 
 pr: none
@@ -36,6 +36,10 @@ variables:
     value: '1.1.2'
   - name: location
     value: 'westeurope'
+  - name: aksAzureRmResourceGroupName
+    value: 'kkdcd7-aks-rg'
+  - name: aksName
+    value: 'kkdcd7aksdev'
   - name: action
     value: ${{ parameters.Action }}
 
@@ -79,25 +83,28 @@ stages :
           environment: ${{ variables.environment }}
           terraform_version: ${{ variables.terraform_version }}
 
-  # - stage: terraform_apply
-  #   dependsOn: [terraform_plan]
-  #   condition: ne('${{ parameters.Action }}', 'Destroy')
-  #   jobs:
-  #     - template: templates/terraform-apply.yaml
-  #       parameters:
-  #         backendServiceArm: ${{ variables.backendServiceArm }}
-  #         backendAzureRmResourceGroupName: ${{ variables.backendAzureRmResourceGroupName }}
-  #         backendAzureRmStorageAccountName: ${{ variables.backendAzureRmStorageAccountName }}
-  #         backendAzureRmContainerName: ${{ variables.backendAzureRmContainerName }}
-  #         backendAzureRmKey: ${{ variables.backendAzureRmKey }}
-  #         environment: ${{ variables.environment }}
-  #         terraform_version: ${{ variables.terraform_version }}
+  - stage: terraform_apply
+    dependsOn: [terraform_plan]
+    condition: ne('${{ parameters.Action }}', 'Destroy')
+    jobs:
+      - template: templates/terraform-apply.yaml
+        parameters:
+          backendServiceArm: ${{ variables.backendServiceArm }}
+          backendAzureRmResourceGroupName: ${{ variables.backendAzureRmResourceGroupName }}
+          backendAzureRmStorageAccountName: ${{ variables.backendAzureRmStorageAccountName }}
+          backendAzureRmContainerName: ${{ variables.backendAzureRmContainerName }}
+          backendAzureRmKey: ${{ variables.backendAzureRmKey }}
+          environment: ${{ variables.environment }}
+          terraform_version: ${{ variables.terraform_version }}
 
-  # - stage: bootstrap
-  #   dependsOn: [terraform_apply]
-  #   condition: ne('${{ parameters.Action }}', 'Destroy')
-  #   jobs:
-  #     - template: templates/az-cli.yaml
+  - stage: bootstrap
+    dependsOn: [terraform_apply]
+    condition: ne('${{ parameters.Action }}', 'Destroy')
+    jobs:
+      - template: templates/aks-az-cli.yaml
+        parameters:
+          aksAzureRmResourceGroupName: ${{ variables.aksAzureRmResourceGroupName }}
+          aksName: ${{ variables.aksName }}
 
   - stage: terraform_destroy
     condition: contains('${{ parameters.Action }}', 'Destroy')

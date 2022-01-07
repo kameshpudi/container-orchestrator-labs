@@ -28,7 +28,7 @@ variables:
     value: 'dev'
 
 stages :   
-  - stage: terraform_remotestate
+  - stage: Dockercompose_ACR
     condition: ne('${{ parameters.Action }}', 'Build')
     jobs:
       - template: templates/acr-docker-compose.yaml

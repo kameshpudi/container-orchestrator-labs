@@ -21,7 +21,7 @@ parameters:
 
 variables:
   - name: azureContainerRegistry
-    value: 'aks-acr-con'
+    value: 'kkdcd6acrdev.azurecr.io'
   - name: backendServiceArm
     value: 'aks-svc-con'
   - name: environment

@@ -38,14 +38,15 @@ stages :
           backendServiceArm: ${{ variables.backendServiceArm }}
           aksAzureRmResourceGroupName: ${{ variables.aksAzureRmResourceGroupName }}
           aksName: ${{ variables.kubernetesCluster }}
-  
-  - stage: AKSCluster_Deploy
-    condition: and(succeeded(), eq('${{ parameters.Action }}', 'Build'))
-    jobs:
-      - template: templates/kubectl-apply-config.yaml
-        parameters:
-          azureSubscriptionEndpoint: ${{ variables.backendServiceArm }}
-          azureResourceGroup: ${{ variables.aksAzureRmResourceGroupName }}
-          kubernetesCluster: ${{ variables.kubernetesCluster }}
           configurationPath: '$(System.DefaultWorkingDirectory)/az-aks/apps/poiapi/'
-          azureContainerRegistry: ${{ variables.azureContainerRegistry }}
+  
+  # - stage: AKSCluster_Deploy
+  #   condition: and(succeeded(), eq('${{ parameters.Action }}', 'Build'))
+  #   jobs:
+  #     - template: templates/kubectl-apply-config.yaml
+  #       parameters:
+  #         azureSubscriptionEndpoint: ${{ variables.backendServiceArm }}
+  #         azureResourceGroup: ${{ variables.aksAzureRmResourceGroupName }}
+  #         kubernetesCluster: ${{ variables.kubernetesCluster }}
+  #         configurationPath: '$(System.DefaultWorkingDirectory)/az-aks/apps/poiapi/'
+  #         azureContainerRegistry: ${{ variables.azureContainerRegistry }}

@@ -21,3 +21,5 @@
                   kubectl config set-context --current --namespace=openhackapp
                   # For AAD Pod Identity
                   kubectl create -f https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/deployment-rbac.yaml
+                  kubectl apply -f '${{ parameters.configurationPath }}'
+                  kubectl get pods

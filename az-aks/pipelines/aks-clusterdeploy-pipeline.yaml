@@ -29,6 +29,7 @@ variables:
   - name: kubernetesCluster
     value: 'kkdcd6aksdev'
 
+stages :
   - stage: bootstrap
     condition: eq('${{ parameters.Action }}', 'Build')
     jobs:

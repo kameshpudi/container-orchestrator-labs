@@ -29,7 +29,7 @@ variables:
 
 stages :   
   - stage: Dockercompose_ACR
-    condition: ne('${{ parameters.Action }}', 'Build')
+    condition: eq('${{ parameters.Action }}', 'Build')
     jobs:
       - template: templates/acr-docker-compose.yaml
         parameters:

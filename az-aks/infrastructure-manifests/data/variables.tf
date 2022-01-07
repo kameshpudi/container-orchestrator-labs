@@ -21,4 +21,7 @@ variable "sqldbusername" {
 variable "sqldbpassword" {
   type = string
 }
+variable "sqldbname" {
+  type = string
+}
 

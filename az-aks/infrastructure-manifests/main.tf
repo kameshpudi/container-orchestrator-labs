@@ -52,6 +52,7 @@ module "data" {
   prefix              = var.prefix
   sqldbusername       = var.sqldbusername
   sqldbpassword       = random_password.password.result
+  sqldbname           = var.sqldbname
 }
 
 # AKS

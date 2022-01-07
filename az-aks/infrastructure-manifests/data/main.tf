@@ -15,7 +15,7 @@ resource "azurerm_sql_server" "sqlsrv" {
 }
 
 resource "azurerm_sql_database" "sqldb" {
-  name                             = "${var.prefix}sqldb${var.env}"
+  name                             = var.sqldbname#"${var.prefix}sqldb${var.env}"
   resource_group_name              = var.resource_group_name
   location                         = var.location
   server_name                      = azurerm_sql_server.sqlsrv.name

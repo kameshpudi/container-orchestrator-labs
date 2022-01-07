@@ -26,3 +26,7 @@ variable "sqldbpassword" {
   type    = string
   default = ""
 }
+variable "sqldbname" {
+  type    = string
+  default = "mydrivingDB"
+}

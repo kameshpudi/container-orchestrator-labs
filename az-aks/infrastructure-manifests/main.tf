@@ -169,4 +169,5 @@ output "sqldb_connectionstring_base64" {
 }
 output "sqldb_connectionstring" {
   value     = random_password.password.result
+  sensitive = true
 }

@@ -8,7 +8,7 @@
           action: Push services
           azureSubscriptionEndpoint:  ${{ parameters.azureSubscriptionEndpoint }}
           azureContainerRegistry: ${{ parameters.containerRegistry }}
-          dockerComposeFile: ${{ parameters.dockeComposeFfile }}
+          dockerComposeFile: ${{ parameters.dockerComposeFile }}
           projectName: $(Build.Repository.Name)
           qualifyImageNames: true
           additionalImageTags: ${{ parameters.BuildId }}

@@ -37,9 +37,9 @@ variables:
   - name: location
     value: 'westeurope'
   - name: aksAzureRmResourceGroupName
-    value: 'kkdcd7-aks-rg'
+    value: 'kkdcd6-aks-rg'
   - name: aksName
-    value: 'kkdcd7aksdev'
+    value: 'kkdcd6aksdev'
   - name: action
     value: ${{ parameters.Action }}
 

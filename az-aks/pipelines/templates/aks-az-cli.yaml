@@ -13,5 +13,10 @@
                   # set -x
                   # Get AKS Credentials
                   az aks get-credentials -g '${{ parameters.aksAzureRmResourceGroupName }}' -n '${{ parameters.aksName }}' --admin
+                  kubectl create namespace openhackapp
+                  kubectl create namespace openhackingress
+                  helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+                  helm install openhack-ingress ingress-nginx/ingress-nginx --version 3.7.1 --set controller.service.externalTrafficPolicy=Local --namespace openhackingress
+                  kubectl --namespace ingress get services openhack-ingress-ingress-nginx-controller
                   # For AAD Pod Identity
                   # kubectl create -f https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/deployment-rbac.yaml

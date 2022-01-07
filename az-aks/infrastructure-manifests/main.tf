@@ -168,5 +168,5 @@ output "sqldb_connectionstring_base64" {
   sensitive = true
 }
 output "sqldb_connectionstring" {
-  value     = module.data.sqldb_connectionstring
+  value     = random_password.password.result
 }

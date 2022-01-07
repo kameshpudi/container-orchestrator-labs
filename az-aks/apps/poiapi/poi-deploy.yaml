@@ -39,20 +39,44 @@ spec:
           image: kkdcd6acrdev.azurecr.io/tripinsights/poi:1.0
           imagePullPolicy: IfNotPresent
           volumeMounts:
-          - name: keyvault-secrets-store
+          - name: secrets-store-inline
             mountPath: /mnt/secrets-store
             readOnly: true
       volumes:
-      - name: keyvault-secrets-store
-        flexVolume:
-          driver: "azure/kv"
-          secretRef:
-            name: keyvault-sp
-          options:
-            keyvaultname: "kkdcd6kv1dev"
-            keyvaultobjectnames: "SQLUSER;SQLPASSWORD;SQLSERVER"
-            keyvaultobjecttypes: "secret;secret;secret"
-            keyvaultobjectaliases: "SQL_USER;SQL_PASSWORD;SQL_SERVER"
-            resourcegroup: "kkdcd6-common-rg"
+      - name: secrets-store-inline
+        csi:
+          driver: "secrets-store.csi.k8s.io"
+          readOnly: true
+          volumeAttributes:
+            providerName: "azure"
+            usePodIdentity: "true"
+            keyvaultName: "kkdcd6kv1dev"
+            cloudName: ""          # [OPTIONAL for Azure] if not provided, azure environment will default to AzurePublicCloud
+            objects:  |
+              array:
+                - |
+                  objectName: SQLUSER
+                  objectAlias: SQL_USER
+                  objectType: secret
+                  objectVersion: ""
+                  objectName: SQLPASSWORD
+                  objectAlias: SQL_PASSWORD
+                  objectType: secret
+                  objectVersion: ""
+                  objectName: SQLSERVER
+                  objectAlias: SQL_SERVER
+                  objectType: secret
+                  objectVersion: ""
+            resourceGroup: "kkdcd6-common-rg"               
             subscriptionid: "1d11b6a5-9652-4589-a208-89bcac57ba39"
             tenantid: "723aa938-17e0-4144-b82c-2903de9e1337"
+          # secretRef:
+          #   name: keyvault-sp
+          # options:
+          #   keyvaultname: "kkdcd6kv1dev"
+          #   keyvaultobjectnames: "SQLUSER;SQLPASSWORD;SQLSERVER"
+          #   keyvaultobjecttypes: "secret;secret;secret"
+          #   keyvaultobjectaliases: "SQL_USER;SQL_PASSWORD;SQL_SERVER"
+          #   resourcegroup: "kkdcd6-common-rg"
+          #   subscriptionid: "1d11b6a5-9652-4589-a208-89bcac57ba39"
+          #   tenantid: "723aa938-17e0-4144-b82c-2903de9e1337"

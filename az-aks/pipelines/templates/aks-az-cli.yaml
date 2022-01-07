@@ -21,5 +21,7 @@
                   kubectl config set-context --current --namespace=openhackapp
                   # For AAD Pod Identity
                   kubectl create -f https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/deployment-rbac.yaml
+                  helm repo add secrets-store-csi-driver https://raw.githubusercontent.com/kubernetes-sigs/secrets-store-csi-driver/master/charts
+                  helm install csi-secrets-store-provider-azure/csi-secrets-store-provider-azure --generate-name
                   kubectl apply -f '${{ parameters.configurationPath }}'
                   kubectl get pods

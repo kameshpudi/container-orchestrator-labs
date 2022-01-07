@@ -18,5 +18,6 @@
                   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
                   helm install openhack-ingress ingress-nginx/ingress-nginx --version 3.7.1 --set controller.service.externalTrafficPolicy=Local --namespace openhackingress
                   kubectl --namespace openhackingress get services openhack-ingress-ingress-nginx-controller
+                  kubectl config set-context --current --namespace=openhackapp
                   # For AAD Pod Identity
                   # kubectl create -f https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/deployment-rbac.yaml

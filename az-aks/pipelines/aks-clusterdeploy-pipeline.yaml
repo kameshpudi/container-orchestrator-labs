@@ -24,19 +24,27 @@ variables:
     value: 'kkdcd6acrdev.azurecr.io'
   - name: backendServiceArm
     value: 'aks-svc-con'
-  - name: azureResourceGroup
+  - name: aksAzureRmResourceGroupName
     value: 'kkdcd6-aks-rg'
   - name: kubernetesCluster
     value: 'kkdcd6aksdev'
 
-stages :   
-  - stage: Dockercompose_ACR
+  - stage: bootstrap
     condition: eq('${{ parameters.Action }}', 'Build')
+    jobs:
+      - template: templates/aks-az-cli.yaml
+        parameters:
+          backendServiceArm: ${{ variables.backendServiceArm }}
+          aksAzureRmResourceGroupName: ${{ variables.aksAzureRmResourceGroupName }}
+          aksName: ${{ variables.kubernetesCluster }}
+  
+  - stage: Dockercompose_ACR
+    condition: and(succeeded(), eq('${{ parameters.Action }}', 'Build'))
     jobs:
       - template: templates/kubectl-apply-config.yaml
         parameters:
           azureSubscriptionEndpoint: ${{ variables.backendServiceArm }}
-          azureResourceGroup: ${{ variables.azureResourceGroup }}
+          azureResourceGroup: ${{ variables.aksAzureRmResourceGroupName }}
           kubernetesCluster: ${{ variables.kubernetesCluster }}
           configurationPath: '$(System.DefaultWorkingDirectory)/az-aks/apps/poiapi/'
           azureContainerRegistry: ${{ variables.azureContainerRegistry }}

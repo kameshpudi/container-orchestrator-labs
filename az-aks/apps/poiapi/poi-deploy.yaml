@@ -51,9 +51,9 @@ spec:
             keyvaultobjectnames: "SQLUSER;SQLPASSWORD;SQLSERVER"
             keyvaultobjecttypes: "secret;secret;secret"
             keyvaultobjectaliases: "SQL_USER;SQL_PASSWORD;SQL_SERVER"
-            resourcegroup: "teamResources"
-            subscriptionid: "'{{guid}}'"
-            tenantid: '{{guid}}'
+            resourcegroup: "kkdcd6-common-rg"
+            subscriptionid: "1d11b6a5-9652-4589-a208-89bcac57ba39"
+            tenantid: "723aa938-17e0-4144-b82c-2903de9e1337"
           ports:
             - containerPort: 8080
       # imagePullSecrets:

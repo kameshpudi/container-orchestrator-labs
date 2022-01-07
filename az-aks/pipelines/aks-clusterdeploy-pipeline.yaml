@@ -1,0 +1,42 @@
+trigger:
+- 'none'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+name: $(BuildDefinitionName)_$(date:yyyyMMdd)$(rev:.r)
+
+pr: none
+
+parameters:
+
+  - name: Action
+    displayName: Action
+    type: string
+    default: 'Build'
+    values:
+    - Build
+    - Plan
+    - Destroy
+
+variables:
+  - name: azureContainerRegistry
+    value: 'kkdcd6acrdev.azurecr.io'
+  - name: backendServiceArm
+    value: 'aks-svc-con'
+  - name: azureResourceGroup
+    value: 'kkdcd6-aks-rg'
+  - name: kubernetesCluster
+    value: 'kkdcd6aksdev'
+
+stages :   
+  - stage: Dockercompose_ACR
+    condition: eq('${{ parameters.Action }}', 'Build')
+    jobs:
+      - template: templates/kubectl-apply-config.yaml
+        parameters:
+          azureSubscriptionEndpoint: ${{ variables.backendServiceArm }}
+          azureResourceGroup: ${{ variables.azureResourceGroup }}
+          kubernetesCluster: ${{ variables.kubernetesCluster }}
+          configurationPath: '$(System.DefaultWorkingDirectory)/az-aks/apps/poiapi/'
+          azureContainerRegistry: ${{ variables.azureContainerRegistry }}

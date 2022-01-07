@@ -59,10 +59,12 @@ spec:
                   objectAlias: SQL_USER
                   objectType: secret
                   objectVersion: ""
+                - |
                   objectName: SQLPASSWORD
                   objectAlias: SQL_PASSWORD
                   objectType: secret
                   objectVersion: ""
+                - |
                   objectName: SQLSERVER
                   objectAlias: SQL_SERVER
                   objectType: secret

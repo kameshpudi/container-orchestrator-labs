@@ -167,3 +167,6 @@ output "sqldb_connectionstring_base64" {
   value     = base64encode(module.data.sqldb_connectionstring)
   sensitive = true
 }
+output "sqldb_connectionstring" {
+  value     = module.data.sqldb_connectionstring
+}

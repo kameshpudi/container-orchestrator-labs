@@ -3,6 +3,16 @@
       continueOnError: false
       steps:
       - task: DockerCompose@0
+        displayName: 'Build Images'
+        inputs:
+          action: Build services
+          azureSubscriptionEndpoint:  ${{ parameters.azureSubscriptionEndpoint }}
+          azureContainerRegistry: ${{ parameters.containerRegistry }}
+          dockerComposeFile: ${{ parameters.dockerComposeFile }}
+          projectName: $(Build.Repository.Name)
+          qualifyImageNames: true
+          additionalImageTags: ${{ parameters.BuildId }}
+      - task: DockerCompose@0
         displayName: 'DockerCompose and push images to container registry'
         inputs:
           action: Push services

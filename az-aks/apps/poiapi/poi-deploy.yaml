@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poi-deploy
+  labels:
+    application: scmpoi
+    service: poiapi
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      application: scmpoi
+      service: poiapi
+  template:
+    metadata:
+      labels:
+        application: scmpoi
+        service: poiapi
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: application
+          resources:
+            requests:
+              memory: '64Mi'
+              cpu: '100m'
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+          image: kkdcd6acrdev.azurecr.io/tripinsights/poi:1.0
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: keyvault-secrets-store
+            mountPath: /mnt/secrets-store
+            readOnly: true
+      volumes:
+      - name: keyvault-secrets-store
+        flexVolume:
+          driver: "azure/kv"
+          secretRef:
+            name: keyvault-sp
+          options:
+            keyvaultname: "kkdcd6kv1dev"
+            keyvaultobjectnames: "SQLUSER;SQLPASSWORD;SQLSERVER"
+            keyvaultobjecttypes: "secret;secret;secret"
+            keyvaultobjectaliases: "SQL_USER;SQL_PASSWORD;SQL_SERVER"
+            resourcegroup: "teamResources"
+            subscriptionid: "'{{guid}}'"
+            tenantid: '{{guid}}'
+          ports:
+            - containerPort: 8080
+      # imagePullSecrets:
+      # - name: regcred

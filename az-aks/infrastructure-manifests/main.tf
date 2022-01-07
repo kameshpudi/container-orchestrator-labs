@@ -141,23 +141,28 @@ resource "azurerm_role_assignment" "role_acrpull" {
 # Save Secrets to Key Vault
 
 resource "azurerm_key_vault_secret" "sqldb_connectionstring" {
-  name         = "${var.prefix}SQLDBCONNECTIONSTRING"
-  value        = base64encode(module.data.sqldb_connectionstring)
+  name         = "SQLDBCONNECTIONSTRING"
+  value        = module.data.sqldb_connectionstring
   key_vault_id = module.common.keyvaultid
 }
 resource "azurerm_key_vault_secret" "sqldb_username" {
-  name         = "${var.prefix}SQLDBUSERNAME"
-  value        = base64encode(module.data.sqldb_username)
+  name         = "SQLUSER"
+  value        = module.data.sqldb_username
   key_vault_id = module.common.keyvaultid
 }
 resource "azurerm_key_vault_secret" "sqldb_pwd" {
-  name         = "${var.prefix}SQLDBPWD"
-  value        = base64encode(module.data.sqldb_pwd)
+  name         = "SQLPASSWORD"
+  value        = module.data.sqldb_pwd
+  key_vault_id = module.common.keyvaultid
+}
+resource "azurerm_key_vault_secret" "sqldb_server" {
+  name         = "SQLSERVER"
+  value        = module.data.sqldb_server
   key_vault_id = module.common.keyvaultid
 }
 resource "azurerm_key_vault_secret" "sqldb_name" {
   name         = "${var.prefix}SQLDBNAME"
-  value        = base64encode(module.data.sqldb_name)
+  value        = module.data.sqldb_name
   key_vault_id = module.common.keyvaultid
 }
 

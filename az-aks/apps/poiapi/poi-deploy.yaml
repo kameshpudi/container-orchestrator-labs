@@ -34,6 +34,8 @@ spec:
             limits:
               memory: '256Mi'
               cpu: '500m'
+          ports:
+            - containerPort: 8080
           image: kkdcd6acrdev.azurecr.io/tripinsights/poi:1.0
           imagePullPolicy: IfNotPresent
           volumeMounts:
@@ -54,7 +56,3 @@ spec:
             resourcegroup: "kkdcd6-common-rg"
             subscriptionid: "1d11b6a5-9652-4589-a208-89bcac57ba39"
             tenantid: "723aa938-17e0-4144-b82c-2903de9e1337"
-          ports:
-            - containerPort: 8080
-      # imagePullSecrets:
-      # - name: regcred

@@ -15,8 +15,8 @@ parameters:
     type: string
     default: 'Build'
     values:
+    - Build
     - Plan
-    - Apply
     - Destroy
 
 variables:

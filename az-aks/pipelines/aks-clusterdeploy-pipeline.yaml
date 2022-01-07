@@ -38,7 +38,7 @@ variables:
           aksAzureRmResourceGroupName: ${{ variables.aksAzureRmResourceGroupName }}
           aksName: ${{ variables.kubernetesCluster }}
   
-  - stage: Dockercompose_ACR
+  - stage: AKSCluster_Deploy
     condition: and(succeeded(), eq('${{ parameters.Action }}', 'Build'))
     jobs:
       - template: templates/kubectl-apply-config.yaml

@@ -51,7 +51,7 @@ module "data" {
   env                 = var.env
   prefix              = var.prefix
   sqldbusername       = var.sqldbusername
-  sqldbpassword       = "changeme@123!" #random_password.password.result
+  sqldbpassword       = var.sqldbpassword #random_password.password.result
   sqldbname           = var.sqldbname
 }
 

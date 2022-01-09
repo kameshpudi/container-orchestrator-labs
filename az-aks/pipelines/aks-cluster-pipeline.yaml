@@ -37,9 +37,9 @@ variables:
   - name: location
     value: 'westeurope'
   - name: aksAzureRmResourceGroupName
-    value: 'kkdcd6-aks-rg'
+    value: 'kkdcd5-aks-rg'
   - name: aksName
-    value: 'kkdcd6aksdev'
+    value: 'kkdcd5aksdev'
   - name: action
     value: ${{ parameters.Action }}
 
@@ -97,15 +97,15 @@ stages :
           environment: ${{ variables.environment }}
           terraform_version: ${{ variables.terraform_version }}
 
-  - stage: bootstrap
-    dependsOn: [terraform_apply]
-    condition: and(succeeded(), ne('${{ parameters.Action }}', 'Destroy'))
-    jobs:
-      - template: templates/aks-az-cli.yaml
-        parameters:
-          backendServiceArm: ${{ variables.backendServiceArm }}
-          aksAzureRmResourceGroupName: ${{ variables.aksAzureRmResourceGroupName }}
-          aksName: ${{ variables.aksName }}
+  # - stage: bootstrap
+  #   dependsOn: [terraform_apply]
+  #   condition: and(succeeded(), ne('${{ parameters.Action }}', 'Destroy'))
+  #   jobs:
+  #     - template: templates/aks-az-cli.yaml
+  #       parameters:
+  #         backendServiceArm: ${{ variables.backendServiceArm }}
+  #         aksAzureRmResourceGroupName: ${{ variables.aksAzureRmResourceGroupName }}
+  #         aksName: ${{ variables.aksName }}
 
   - stage: terraform_destroy
     condition: contains('${{ parameters.Action }}', 'Destroy')

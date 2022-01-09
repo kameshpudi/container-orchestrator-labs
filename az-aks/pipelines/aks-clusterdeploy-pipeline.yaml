@@ -21,13 +21,13 @@ parameters:
 
 variables:
   - name: azureContainerRegistry
-    value: 'kkdcd6acrdev.azurecr.io'
+    value: 'kkdcd5acrdev.azurecr.io'
   - name: backendServiceArm
     value: 'aks-svc-con'
   - name: aksAzureRmResourceGroupName
-    value: 'kkdcd6-aks-rg'
+    value: 'kkdcd5-aks-rg'
   - name: kubernetesCluster
-    value: 'kkdcd6aksdev'
+    value: 'kkdcd5aksdev'
 
 stages :
   - stage: bootstrap

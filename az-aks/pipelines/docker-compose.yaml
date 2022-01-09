@@ -3,29 +3,29 @@ services:
   poi:
     build:
       context: ../src/poi
-      dockerfile: ../../dockerfiles/Dockerfile_3
+      dockerfile: ../../dockerfiles/poi
     image: tripinsights/poi:1.0
 
   trips:
     build:
       context: ../src/trips
-      dockerfile: ../../dockerfiles/Dockerfile_4
+      dockerfile: ../../dockerfiles/trips
     image: tripinsights/trips:1.0
   
   user-java:
     build:
       context: ../src/user-java
-      dockerfile: ../../dockerfiles/Dockerfile_0
+      dockerfile: ../../dockerfiles/userjava
     image: tripinsights/user-java:1.0
   
   userprofile:
     build:
       context: ../src/userprofile
-      dockerfile: ../../dockerfiles/Dockerfile_2
+      dockerfile: ../../dockerfiles/userprofile
     image: tripinsights/userprofile:1.0
 
   tripviewer:
     build:
       context: ../src/tripviewer
-      dockerfile: ../../dockerfiles/Dockerfile_1
+      dockerfile: ../../dockerfiles/tripviewer
     image: tripinsights/tripviewer:1.0

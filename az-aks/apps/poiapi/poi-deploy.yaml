@@ -38,6 +38,13 @@ spec:
             - containerPort: 8080
           image: kkdcd5acrdev.azurecr.io/tripinsights/poi:1.0
           imagePullPolicy: Always
+          env:
+          - name: WEB_SERVER_BASE_URI
+            value: 'http://0.0.0.0'
+          - name: WEB_PORT
+            value: '8080'
+          - name: ASPNETCORE_ENVIRONMENT
+            value: 'Production'
       #     volumeMounts:
       #     - name: secrets-store-inline
       #       mountPath: /mnt/secrets-store

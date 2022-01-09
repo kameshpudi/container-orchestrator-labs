@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: poi-deploy
+  name: userjava-deploy
   labels:
-    application: scmpoi
-    service: poiapi
+    application: scmuserjava
+    service: userjavaapi
 spec:
   replicas: 2
   strategy:
@@ -16,13 +16,13 @@ spec:
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      application: scmpoi
-      service: poiapi
+      application: scmuserjava
+      service: userjavaapi
   template:
     metadata:
       labels:
-        application: scmpoi
-        service: poiapi
+        application: scmuserjava
+        service: userjavaapi
     spec:
       automountServiceAccountToken: false
       containers:
@@ -36,7 +36,7 @@ spec:
               cpu: '500m'
           ports:
             - containerPort: 8080
-          image: kkdcd5acrdev.azurecr.io/tripinsights/poi:1.0
+          image: kkdcd5acrdev.azurecr.io/tripinsights/user-java:1.0
           imagePullPolicy: Always
       #     volumeMounts:
       #     - name: secrets-store-inline

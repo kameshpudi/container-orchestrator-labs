@@ -20,8 +20,8 @@
                   kubectl --namespace openhackingress get services openhack-ingress-ingress-nginx-controller
                   kubectl config set-context --current --namespace=openhackapp
                   # For AAD Pod Identity
-                  kubectl create -f https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/deployment-rbac.yaml
-                  helm repo add csi-secrets-store-provider-azure https://raw.githubusercontent.com/Azure/secrets-store-csi-driver-provider-azure/master/charts
-                  helm install csi-secrets-store-provider-azure/csi-secrets-store-provider-azure --generate-name
-                  kubectl apply -f '${{ parameters.configurationPath }}'
-                  kubectl get pods
+                  #kubectl create -f https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/deployment-rbac.yaml
+                  #helm repo add csi-secrets-store-provider-azure https://raw.githubusercontent.com/Azure/secrets-store-csi-driver-provider-azure/master/charts
+                  #helm install csi-secrets-store-provider-azure/csi-secrets-store-provider-azure --generate-name
+                  #kubectl apply -f '${{ parameters.configurationPath }}'
+                  #kubectl get pods

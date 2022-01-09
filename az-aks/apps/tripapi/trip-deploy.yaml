@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: poi-deploy
+  name: trip-deploy
   labels:
-    application: scmpoi
-    service: poiapi
+    application: scmtrip
+    service: tripapi
 spec:
   replicas: 2
   strategy:
@@ -16,13 +16,13 @@ spec:
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      application: scmpoi
-      service: poiapi
+      application: scmtrip
+      service: tripapi
   template:
     metadata:
       labels:
-        application: scmpoi
-        service: poiapi
+        application: scmtrip
+        service: tripapi
     spec:
       automountServiceAccountToken: false
       containers:
@@ -36,8 +36,11 @@ spec:
               cpu: '500m'
           ports:
             - containerPort: 8080
-          image: kkdcd5acrdev.azurecr.io/tripinsights/poi:1.0
+          image: kkdcd5acrdev.azurecr.io/tripinsights/trips:1.0
           imagePullPolicy: Always
+          env:
+          - name: OPENAPI_DOCS_URI
+            value: 'http://0.0.0.0'
       #     volumeMounts:
       #     - name: secrets-store-inline
       #       mountPath: /mnt/secrets-store

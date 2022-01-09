@@ -9,5 +9,5 @@ roleRef:
   name: AKS-cluster-admins
 subjects:
 - apiGroup: rbac.authorization.k8s.io
-  kind: User
+  kind: Group
   name: "2aec6707-2fa6-417c-a8a0-0c149877e43b"

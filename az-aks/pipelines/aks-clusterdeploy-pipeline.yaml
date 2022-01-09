@@ -45,7 +45,7 @@ stages :
     jobs:
       - template: templates/kubectl-apply-config.yaml
         parameters:
-          azureSubscriptionEndpoint: ${{ variables.backendServiceArm }}
+          azureSubscriptionEndpoint: "aksdeploy-svc-con"
           azureResourceGroup: ${{ variables.aksAzureRmResourceGroupName }}
           kubernetesCluster: ${{ variables.kubernetesCluster }}
           configurationPath: '$(System.DefaultWorkingDirectory)/az-aks/apps/poiapi/'

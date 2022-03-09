@@ -62,7 +62,7 @@ docker container run --rm -d -p 80:80 --name test_container kameshpudi/firstimag
 docker stop container <container name or id>
 
 
-docker image build -f Dockerfile.mysql -t 
+docker image build -f Dockerfile.mysql -t kameshpudi/mysql:v1 .
 docker network create php-mysql-net
 docker container run -d --name phpapp --network php-mysql-net -p 80:80 --env-file env.list kameshpudi/php:v1
 docker container run -d --name mysqldb --network php-mysql-net --env-file envmysql.list kameshpudi/mysql:v1
@@ -71,3 +71,21 @@ Docker commit:
 create image from container
 docker container run -it --name commit_test busybox sh
 docker commit commit_test kameshpudi/commit:v1
+
+
+ACR:
+docker logout
+docker login kkconreg.azurecr.io -u kkconreg -p Password
+docker image build -t kameshpudi/php:v1 .
+docker image build -f Dockerfile.mysql -t kameshpudi/mysql:v1 .
+docker image tag kameshpudi/php:v1 kkconreg.azurecr.io/php:v1
+docker image tag kameshpudi/mysql:v1 kkconreg.azurecr.io/mysql:v1
+docker image push kkconreg.azurecr.io/php:v1
+docker image push kkconreg.azurecr.io/mysql:v1
+
+az aks get-credentials --resource-group contianercollege-rg --name kktestaks
+kubectl get nodes
+kubectl apply -f app.yaml
+kubectl get pods
+kubectl get svc
+

@@ -1,0 +1,57 @@
+az group create --name kk-aks-rg --location westeurope
+az aks create --resource-group kk-aks-rg --name kk-cluster --enable-managed-identity --generate-ssh-keys --kubernetes-version 1.22.6
+
+az aks get-credentials --resource-group kk-aks-rg --name adc-cluster
+kubectl version
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
+
+kubectl apply -f dashboard-admin.yaml
+kubectl -n kubernetes-dashboard get secret
+
+---------------------------------------------
+Basic AKS
+az group create --name kk-acr-rg --location westeurope
+az acr create --name kkacr1 --resource-group kk-acr-rg --sku basic --admin-enabled
+az aks update --resource-group kk-aks-rg --name kk-cluster --attach-acr kkacr1
+
+
+cd day7/challenges/samples/challenge-2/singlecontainer
+
+docker build -t test:1.0 .
+docker run -p 8080:80 test:1.0
+
+ACRPWD=$(az acr credential show -n kkacr1.azurecr.io --query "passwords[0].value" -o tsv)
+docker login kkacr1.azurecr.io -u kkacr1 -p $ACRPWD
+
+docker tag test:1.0 kkacr1.azurecr.io/test:1.0
+docker push kkacr1.azurecr.io/test:1.0
+OR
+Directly pushing image to ACR without docker in local
+cd day7/challenges/samples/challenge-2/singlecontainer
+az acr build -r kkacr1 -t kkacr1.azurecr.io/test:2.0 .
+kubectl apply -f myfirstpod.yaml
+kubectl describe pod myfirstpod
+kubectl port-forward myfirstpod 8080:80
+
+
+cd day7/apps/dotnetcore/Scm
+
+docker build -t kkacr1.azurecr.io/adc-api-sql:1.0 -f ./Adc.Scm.Api/Dockerfile .
+docker push kkacr1.azurecr.io/adc-api-sql:1.0
+
+OR
+az acr build -r kkacr1 -t kkacr1.azurecr.io/adc-api-sql:1.0 -f ./Adc.Scm.Api/Dockerfile .
+
+cd /day7/challenges/samples/challenge-2/multicontainer
+update sql pod ip, acr name then
+kubectl apply -f api.yaml
+kubectl apply -f sqlserver-service.yaml
+kubectl apply -f api-service.yaml
+
+
+
+
+
+
+
+
